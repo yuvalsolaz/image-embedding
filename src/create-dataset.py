@@ -13,7 +13,7 @@ def start_crawler(Crawler_class:icrawler, path:Path, search_text:str, num_images
             parser_threads=2,
             downloader_threads=8,
             storage={'root_dir': path})
-    crawler.crawl(keyword=search_text, max_num=num_images, file_idx_offset=file_idx_offset)
+    crawler.crawl(keyword=search_text, max_num=num_images, file_idx_offset=0)
 
 
 if __name__ == '__main__':
