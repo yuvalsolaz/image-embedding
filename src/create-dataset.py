@@ -1,19 +1,20 @@
 
-import os, sys, shutil
+import os, sys
 from pathlib import Path
-import hashlib, magic
-import icrawler
-from icrawler.builtin import GoogleImageCrawler, BingImageCrawler
+from icrawler.builtin import BaiduImageCrawler, GoogleImageCrawler, BingImageCrawler
 
 
-def start_crawler(Crawler_class:icrawler, path:Path, search_text:str, num_images:int, file_idx_offset=0):
-    """Kicks off a icarwler download."""
-    crawler = Crawler_class(
+def start_crawler(path:Path, search_text, num_images):
+
+    crawler = BaiduImageCrawler(
             feeder_threads=2,
             parser_threads=2,
-            downloader_threads=8,
+            downloader_threads=4,
             storage={'root_dir': path})
-    crawler.crawl(keyword=search_text, max_num=num_images, file_idx_offset=0)
+
+    crawler.crawl(keyword=search_text,
+                  min_size=(64, 64),
+                  max_num=num_images)
 
 
 if __name__ == '__main__':
@@ -23,8 +24,8 @@ if __name__ == '__main__':
 
     search_text = sys.argv[1]
     num_images = int(sys.argv[2])
-    path = os.path.join(os.getcwd(),'dataset')
+    path = os.path.join(os.getcwd(),'dataset',search_text)
     print(f'downloading {num_images} images for {search_text} into {path}')
 
-    start_crawler(BingImageCrawler, path, search_text, num_images, file_idx_offset='auto')
+    start_crawler(path, search_text, num_images)
 
